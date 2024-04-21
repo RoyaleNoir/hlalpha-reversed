@@ -39,13 +39,13 @@ const char *gDecals[] = {
 	"{shot4",
 	"{shot5",
 	"{hl",
-	"{lambda01"
-	"{lambda02"
-	"{lambda03"
-	"{lambda04"
-	"{lambda05"
-	"{lambda06"
-	"{scorch1"
+	"{lambda01",
+	"{lambda02",
+	"{lambda03",
+	"{lambda04",
+	"{lambda05",
+	"{lambda06",
+	"{scorch1",
 	"{scorch2",
 	"{blood1",
 	"{blood2",

@@ -102,6 +102,7 @@ typedef struct enginefuncs_s
 	int			(*pfnEntOffsetOfPEntity)	(const edict_t *pEdict);
 	void		(*_UNKNOWN12)				(void);
 	void		(*_UNKNOWN13)				(void);
+	void		(*_UNKNOWN14)				(void);
 } enginefuncs_t;
 
 // Passed to pfnKeyValue
