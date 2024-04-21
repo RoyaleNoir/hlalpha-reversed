@@ -1,0 +1,5 @@
+# DLL build products
+dlls/Debug/
+
+# Visual C++ 4.2 workspaces store absolute paths.
+*.mdp
