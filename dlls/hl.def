@@ -1,0 +1,22 @@
+LIBRARY hl
+EXPORTS
+	GiveFnptrsToDll			@1
+	SetChangeParms			@2
+	SetNewParms				@3
+	ClientKill				@4
+	PutClientInServer		@5
+	PlayerPreThink			@6
+	PlayerPostThink			@7
+	ClientConnect			@8
+	ClientDisconnect		@9
+	StartFrame				@10
+	DispatchBlocked			@11
+	DispatchKeyValue		@12
+	DispatchRestore			@13
+	DispatchSave			@14
+	DispatchSpawn			@15
+	DispatchThink			@16
+	DispatchTouch			@17
+	DispatchUse				@18
+SECTIONS
+	.data READ WRITE
