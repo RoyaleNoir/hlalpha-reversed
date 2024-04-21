@@ -67,15 +67,14 @@ extern enginefuncs_t g_engfuncs;
 #define ENGINE_FPRINTF	(*g_engfuncs.pfnEngineFprintf)
 #define ALLOC_PRIVATE	(*g_engfuncs.pfnPvAllocEntPrivateData)
 #define GET_PRIVATE		(*g_engfuncs.pfnPvEntPrivateData)
-
-
-
+#define FREE_PRIVATE	(*g_engfuncs.pfnFreeEntPrivateData)
 #define STRING			(*g_engfuncs.pfnSzFromIndex)
 #define ALLOC_STRING	(*g_engfuncs.pfnAllocString)
 #define FIND_ENTITY_BY_STRING	(*g_engfuncs.pfnFindEntityByString)
 #define GETENTITYILLUM	(*g_engfuncs.pfnGetEntityIllum)
 #define FIND_ENTITY_IN_SPHERE	(*g_engfuncs.pfnFindEntityInSphere)
-#define FIND_CLIENT_IN_PVS			(*g_engfuncs.pfnFIndClientInPVS)
+#define FIND_CLIENT_IN_PVS			(*g_engfuncs.pfnFindClientInPVS)
 #define EMIT_AMBIENT_SOUND			(*g_engfuncs.pfnEmitAmbientSound)
+#define GET_MODEL_PTR				(*g_engfuncs.pfnGetModelPtr)	
 
 #endif		//ENGINECALLBACK_H

@@ -36,73 +36,88 @@ typedef enum
 	at_logged		// Server print to console ( only in multiplayer games ).
 	} ALERT_TYPE;
 
+// Returned by TraceLine
+typedef struct
+	{
+	int		fAllSolid;			// if true, plane is not valid
+	int		fStartSolid;		// if true, the initial point was in a solid area
+	int		fInOpen;
+	int		fInWater;
+	float	flFraction;			// time completed, 1.0 = didn't hit anything
+	vec3_t	vecEndPos;			// final position
+	float	flPlaneDist;
+	vec3_t	vecPlaneNormal;		// surface normal at impact
+	edict_t	*pHit;				// entity the surface is on
+	int		iHitgroup;			// 0 == generic, non zero is specific body part
+	} TraceResult;
+
 // Engine hands this to DLLs for functionality callbacks
 typedef struct enginefuncs_s
 {
 	int			(*pfnPrecacheModel)			(char* s);
 	int			(*pfnPrecacheSound)			(char* s);
 	void		(*pfnSetModel)				(edict_t *e, const char *m);
-	void		(*_UNKNOWN_1)				(void);
+	void		(*pfnModelIndex)			(const char *m);
 	void		(*pfnSetSize)				(edict_t *e, const float *rgflMin, const float *rgflMax);
-	void		(*pfnChangeLevel)			(void);
+	void		(*pfnChangeLevel)			(char* s1, char* s2);
 	void		(*pfnGetSpawnParms)			(edict_t *ent);
 	void		(*pfnSaveSpawnParms)		(edict_t *ent);
-	void		(*pfnVecToYaw)				(void);
-	void		(*pfnVecToAngles)			(void);
-	void		(*_UNKNOWN_2)				(void);
-	void		(*pfnMoveToOrigin)			(void);
-	void		(*pfnChangeYaw)				(void);
-	void		(*pfnChangePitch)			(void);
+	float		(*pfnVecToYaw)				(const float *rgflVector);
+	void		(*pfnVecToAngles)			(const float *rgflVectorIn, float *rgflVectorOut);
+	void		(*_UNKNOWN_1)				(void);
+	void		(*pfnMoveToOrigin)			(edict_t *ent, const float *pflGoal, float dist, int iMoveType);
+	void		(*pfnChangeYaw)				(edict_t *ent);
+	void		(*pfnChangePitch)			(edict_t *ent);
 	edict_t*	(*pfnFindEntityByString)	(edict_t *pEdictStartSearchAfter, const char *pszField, const char *pszValue);
-	void		(*pfnGetEntityIllum)		(void);
-	void		(*pfnFindEntityInSphere)	(void);
+	void		(*pfnGetEntityIllum)		(edict_t *pEnt);
+	void		(*pfnFindEntityInSphere)	(const float *org, float rad);
 	void		(*pfnFindClientInPVS)		(void);
-	void		(*pfnMakeVectors)			(void);
+	void		(*pfnMakeVectors)			(const float *rgflVector);
 	edict_t*	(*pfnCreateEntity)			(void);
-	void		(*pfnRemoveEntity)			(void);
-	void		(*pfnMakeStatic)			(void);
-	void		(*pfnEntIsOnFloor)			(void);
-	void		(*pfnDropToFloor)			(void);
-	void		(*pfnWalkMove)				(void);
+	void		(*pfnRemoveEntity)			(edict_t* e);
+	void		(*pfnMakeStatic)			(edict_t *ent);
+	int			(*pfnEntIsOnFloor)			(edict_t *e);
+	int			(*pfnDropToFloor)			(edict_t* e);
+	float		(*pfnWalkMove)				(edict_t *ent, float yaw, float dist);
 	void		(*pfnSetOrigin)				(edict_t *e, const float *rgflOrigin);
 	void		(*pfnEmitSound)				(edict_t *e, int channel, const char *sample, float volume, float attenuation);
 	void		(*pfnEmitAmbientSound)		(float *pos, const char *samp, float vol, float attenuation);
-	void		(*pfnTraceLine)				(void);
-	void		(*_UNKNOWN_3)				(void);
-	void		(*pfnGetAimVector)			(void);
+	void		(*pfnTraceLine)				(const float *v1, const float *v2, int fNoMonsters, edict_t *pentToSkip, TraceResult *ptr);
+	void		(*_UNKNOWN_2)				(void);
+	void		(*pfnGetAimVector)			(edict_t* ent, float speed, float *rgflReturn);
 	void		(*pfnServerCommand)			(char *str);
-	void		(*pfnClientCommand)			(void);
-	void		(*pfnParticleEffect)		(void);
+	void		(*pfnClientCommand)			(edict_t* pEdict, char* szFmt, ...);
+	void		(*pfnParticleEffect)		(const float *org, const float *dir, float color, float count);
 	void		(*pfnLightStyle)			(int style, char* val);
 	void		(*pfnDecalIndex)			(int index, const char* name);
-	void		(*pfnPointContents)			(void);
-	void		(*pfnWriteByte)				(void);
-	void		(*pfnWriteChar)				(void);
-	void		(*pfnWriteShort)			(void);
-	void		(*pfnWriteLong)				(void);
-	void		(*pfnWriteAngle)			(void);
-	void		(*pfnWriteCoord)			(void);
-	void		(*pfnWriteString)			(void);
-	void		(*pfnWriteEntity)			(void);
+	void		(*pfnPointContents)			(const float *rgflVector);
+	void		(*pfnWriteByte)				(int msg_dest, int iValue);
+	void		(*pfnWriteChar)				(int msg_dest, int iValue);
+	void		(*pfnWriteShort)			(int msg_dest, int iValue);
+	void		(*pfnWriteLong)				(int msg_dest, int iValue);
+	void		(*pfnWriteAngle)			(int msg_dest, float flValue);
+	void		(*pfnWriteCoord)			(int msg_dest, float flValue);
+	void		(*pfnWriteString)			(int msg_dest, const char *sz);
+	void		(*pfnWriteEntity)			(int msg_dest, int iValue);
 	float		(*pfnCVarGetFloat)			(const char *szVarName);
 	const char*	(*pfnCVarGetString)			(const char *szVarName);
 	void		(*pfnCVarSetFloat)			(const char *szVarName, float flValue);
 	void		(*pfnCVarSetString)			(const char *szVarName, const char *szValue);
 	void		(*pfnAlertMessage)			(ALERT_TYPE atype, char *szFmt, ...);
-	void		(*pfnEngineFprintf)			(void);
+	void		(*pfnEngineFprintf)			(void *pfile, char *szFmt, ...);
 	void*		(*pfnPvAllocEntPrivateData)	(edict_t *pEdict, long cb);
 	void*		(*pfnPvEntPrivateData)		(edict_t *pEdict);
-	void		(*_UNKNWON_9)				(void);
-	void		(*_UNKNWON_10)				(void);
-	void		(*_UNKNWON_11)				(void);
+	void		(*pfnFreeEntPrivateData)	(edict_t *pEdict);
+	void*		(*pfnGetDispatchFunction)	(edict_t *pEdict, int iFunc);
+	void		(*pfnUNUSED)				(void);
 	const char*	(*pfnSzFromIndex)			(int iString);
 	int			(*pfnAllocString)			(const char *szValue);
 	entvars_t*	(*pfnGetVarsOfEnt)			(edict_t *pEdict);
 	edict_t*	(*pfnPEntityOfEntOffset)	(int iEntOffset);
 	int			(*pfnEntOffsetOfPEntity)	(const edict_t *pEdict);
-	void		(*_UNKNOWN12)				(void);
-	void		(*_UNKNOWN13)				(void);
-	void		(*_UNKNOWN14)				(void);
+	int			(*_UNKNOWN3)				(int iEntOffset);
+	edict_t*	(*pfnFindEntityByVars)		(struct entvars_s* pvars);
+	void*		(*pfnGetModelPtr)			(edict_t *pEdict);
 } enginefuncs_t;
 
 // Passed to pfnKeyValue
